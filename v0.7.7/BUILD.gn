@@ -24,7 +24,7 @@ build_rust("cortex_m") {
       "--cfg",
       "armv7m",
     ]
-  } else if (board == "qemu_mps3_an547") {
+  } else if (board == "qemu_mps3_an547" || board == "raspberry_pico2_cortexm") {
     rustflags += [
       "-Clink-arg=$lib_path/thumbv8m.main-none-eabihf",
       "--cfg",
