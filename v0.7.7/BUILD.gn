@@ -1,4 +1,5 @@
 import("//build/templates/build_template.gni")
+
 build_rust("cortex_m") {
   crate_type = "rlib"
   sources = [ "src/lib.rs" ]
@@ -10,33 +11,6 @@ build_rust("cortex_m") {
     "//external/embedded-hal/v0.2.7:embedded_hal",
     "//external/volatile-register/v0.2.2:volatile_register",
   ]
-
   features = [ "inline-asm" ]
-
-  rustflags = [ "--cap-lints=allow" ]
-
-  lib_path = rebase_path("bin")
-  if (board == "qemu_mps2_an385") {
-    rustflags += [
-      "-Clink-arg=$lib_path/thumbv7m-none-eabi",
-      "--cfg",
-      "cortex_m",
-      "--cfg",
-      "armv7m",
-    ]
-  } else if (board == "qemu_mps3_an547") {
-    rustflags += [
-      "-Clink-arg=$lib_path/thumbv8m.main-none-eabihf",
-      "--cfg",
-      "cortex_m",
-      "--cfg",
-      "armv8m",
-      "--cfg",
-      "armv8m_main",
-      "--cfg",
-      "has_fpu",
-    ]
-  } else {
-    not_needed([ lib_path ])
-  }
+  configs += [ "//build/boards/${board}:kernel_config" ]
 }
